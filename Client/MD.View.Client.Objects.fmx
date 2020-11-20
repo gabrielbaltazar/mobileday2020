@@ -101,7 +101,6 @@ object frmMobileDayObject: TfrmMobileDayObject
           ItemEditAppearanceClassName = 'TImageListItemRightButtonDeleteAppearance'
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
-          ItemIndex = 0
           Align = Client
           Size.Width = 351.000000000000000000
           Size.Height = 493.000000000000000000
@@ -174,7 +173,7 @@ object frmMobileDayObject: TfrmMobileDayObject
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         TextSettings.FontColor = xFF011638
         Text = 'Name'
-        TabOrder = 18
+        TabOrder = 21
       end
       object edtName: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -195,7 +194,7 @@ object frmMobileDayObject: TfrmMobileDayObject
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         TextSettings.FontColor = xFF011638
         Text = 'Last Name'
-        TabOrder = 13
+        TabOrder = 15
       end
       object edtLastName: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -216,7 +215,7 @@ object frmMobileDayObject: TfrmMobileDayObject
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         TextSettings.FontColor = xFF011638
         Text = 'Phone'
-        TabOrder = 8
+        TabOrder = 9
       end
       object edtPhone: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -296,79 +295,6 @@ object frmMobileDayObject: TfrmMobileDayObject
         Size.Height = 32.000000000000000000
         Size.PlatformDefault = False
       end
-    end
-  end
-  object adpClient: TDataGeneratorAdapter
-    FieldDefs = <
-      item
-        Name = 'name'
-        ReadOnly = False
-      end
-      item
-        Name = 'lastName'
-        ReadOnly = False
-      end
-      item
-        Name = 'id'
-        FieldType = ftInteger
-        ReadOnly = False
-      end
-      item
-        Name = 'phone'
-        ReadOnly = False
-      end>
-    Active = True
-    AutoPost = True
-    Options = [loptAllowInsert, loptAllowDelete, loptAllowModify]
-    Left = 88
-    Top = 496
-  end
-  object absClients: TAdapterBindSource
-    AutoActivate = True
-    OnCreateAdapter = absClientsCreateAdapter
-    Adapter = adpClient
-    ScopeMappings = <>
-    Left = 48
-    Top = 496
-  end
-  object BindingsList1: TBindingsList
-    Methods = <>
-    OutputConverters = <>
-    Left = 12
-    Top = 501
-    object LinkControlToField1: TLinkControlToField
-      Category = 'Quick Bindings'
-      DataSource = absClients
-      FieldName = 'name'
-      Control = edtName
-      Track = False
-    end
-    object LinkControlToField2: TLinkControlToField
-      Category = 'Quick Bindings'
-      DataSource = absClients
-      FieldName = 'lastName'
-      Control = edtLastName
-      Track = False
-    end
-    object LinkListControlToField1: TLinkListControlToField
-      Category = 'Quick Bindings'
-      DataSource = absClients
-      FieldName = 'name'
-      Control = lvClients
-      FillExpressions = <
-        item
-          SourceMemberName = 'lastName'
-          ControlMemberName = 'Detail'
-        end>
-      FillHeaderExpressions = <>
-      FillBreakGroups = <>
-    end
-    object LinkControlToField3: TLinkControlToField
-      Category = 'Quick Bindings'
-      DataSource = absClients
-      FieldName = 'phone'
-      Control = edtPhone
-      Track = False
     end
   end
 end

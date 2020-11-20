@@ -1,8 +1,4 @@
-﻿[adpClient]
-Visible=False
-Coordinates=444,1,61,33
-
-[edtPhone]
+﻿[edtPhone]
 Coordinates=30,260,61,51
 Visible=True
 
@@ -23,9 +19,6 @@ Coordinates=573,494,58,33
 
 [Label4]
 Coordinates=193,410,46,51
-
-[BindingsList1]
-Coordinates=444,111,82,33
 
 [tiList]
 Coordinates=505,494,40,33
@@ -67,9 +60,6 @@ Coordinates=812,410,69,33
 [Rectangle3]
 Coordinates=706,410,69,33
 
-[absClients]
-Coordinates=156,99,66,177
-
 [edtLastName]
 Coordinates=319,10,79,51
 
@@ -81,4 +71,8 @@ Coordinates=602,10,56,51
 
 [tiCrud]
 Coordinates=631,410,44,33
+
+[]
+Visible=False
+Coordinates=444,111,82,33
 
