@@ -11,22 +11,11 @@ uses
   System.Generics.Collections, Data.Bind.EngExt, Fmx.Bind.DBEngExt,
   System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
   Data.Bind.Components, Data.Bind.ObjectScope, FMX.Layouts,
-  GBClient.Interfaces, System.JSON, REST.Json;
+  System.JSON, REST.Json,
+  MD.Model.Client,
+  GBClient.Interfaces;
 
 type
-  TClient = class
-  private
-    Fname: string;
-    FlastName: String;
-    Fid: Integer;
-    Fphone: String;
-  public
-    property id: Integer read Fid write Fid;
-    property name: string read Fname write Fname;
-    property lastName: String read FlastName write FlastName;
-    property phone: String read Fphone write Fphone;
-  end;
-
   TfrmMobileDayObject = class(TForm)
     Rectangle1: TRectangle;
     Label5: TLabel;
@@ -51,35 +40,32 @@ type
     Label1: TLabel;
     edtBaseUrl: TEdit;
     btnClear: TSpeedButton;
+    VertScrollBox1: TVertScrollBox;
     adpClient: TDataGeneratorAdapter;
     absClients: TAdapterBindSource;
     BindingsList1: TBindingsList;
     LinkControlToField1: TLinkControlToField;
     LinkControlToField2: TLinkControlToField;
-    LinkListControlToField1: TLinkListControlToField;
-    VertScrollBox1: TVertScrollBox;
     LinkControlToField3: TLinkControlToField;
+    LinkListControlToField1: TLinkListControlToField;
     procedure FormCreate(Sender: TObject);
     procedure tbcClientChange(Sender: TObject);
     procedure btnAddClick(Sender: TObject);
     procedure lvClientsButtonClick(const Sender: TObject; const AItem: TListItem; const AObject: TListItemSimpleControl);
-    procedure absClientsCreateAdapter(Sender: TObject; var ABindSourceAdapter: TBindSourceAdapter);
     procedure btnClearClick(Sender: TObject);
     procedure lvClientsItemClick(const Sender: TObject; const AItem: TListViewItem);
     procedure btnSaveClick(Sender: TObject);
+    procedure absClientsCreateAdapter(Sender: TObject;
+      var ABindSourceAdapter: TBindSourceAdapter);
   private
-    FClients : TObjectList<TClient>;
-    FRequest : IGBClientRequest;
+    FClients: TObjectList<TClient>;
 
     function PrepareRequest: IGBClientRequest;
-
-    procedure refreshList;
 
     procedure listAll;
     procedure Insert(AClient: TClient);
     procedure Update(AClient: TClient);
     procedure Delete;
-
     { Private declarations }
   public
     { Public declarations }
@@ -94,10 +80,9 @@ implementation
 
 procedure TfrmMobileDayObject.absClientsCreateAdapter(Sender: TObject; var ABindSourceAdapter: TBindSourceAdapter);
 begin
-  FClients := TObjectList<TClient>.create;
-
+  FClients := TObjectList<TClient>.Create;
   ABindSourceAdapter := TListBindSourceAdapter<TClient>
-                          .Create(Self, FClients);
+                            .Create(Self, FClients);
 
   ABindSourceAdapter.AutoEdit := True;
   ABindSourceAdapter.Active := True;
@@ -105,20 +90,12 @@ end;
 
 procedure TfrmMobileDayObject.btnAddClick(Sender: TObject);
 begin
-  tbcClient.ActiveTab := tiCrud;
   absClients.Insert;
+  tbcClient.ActiveTab := tiCrud;
 end;
 
 procedure TfrmMobileDayObject.btnClearClick(Sender: TObject);
-var
-  client : TClient;
 begin
-  client := FClients[lvClients.ItemIndex];
-  if client.id = 0 then
-    absClients.Delete
-  else
-    absClients.Cancel;
-
   tbcClient.ActiveTab := tiList;
 end;
 
@@ -127,9 +104,9 @@ var
   client : TClient;
 begin
   absClients.Post;
-  client := FClients[lvClients.ItemIndex];
 
-  if client.id <= 0 then
+  client := FClients[lvClients.ItemIndex];
+  if client.id = 0 then
     Insert(client)
   else
     Update(client);
@@ -139,23 +116,19 @@ end;
 
 procedure TfrmMobileDayObject.Delete;
 var
+  request : IGBClientRequest;
   client : TClient;
 begin
-  client := FClients[lvClients.ItemIndex];
-
-  PrepareRequest
+  client  := FClients[lvClients.ItemIndex];
+  request := PrepareRequest;
+  request
     .DELETE
-    .Resource('client/{id}')
-    .ParamPath
-      .AddOrSet('id', client.id)
-    .&End
+    .BaseURL(edtBaseUrl.Text + '/' + client.id.ToString)
     .Send;
 end;
 
 procedure TfrmMobileDayObject.FormCreate(Sender: TObject);
 begin
-  FRequest := NewClientRequest;
-
   tbcClient.ActiveTab   := tiList;
   tbcClient.TabPosition := TTabPosition.None;
 
@@ -163,32 +136,34 @@ begin
 end;
 
 procedure TfrmMobileDayObject.Insert(AClient: TClient);
+var
+  request : IGBClientRequest;
 begin
-  PrepareRequest
+  request := PrepareRequest;
+  request
     .POST
-    .Resource('client')
+    .BaseURL(edtBaseUrl.Text)
     .Body
       .AddOrSet(AClient)
     .&End
-    .Send
-    .GetObject(AClient);
+    .Send;
+
+  AClient.id := request.Response.HeaderAsInteger('location');
 end;
 
 procedure TfrmMobileDayObject.listAll;
+var
+  request : IGBClientRequest;
 begin
-  try
-    FClients.Clear;
-      PrepareRequest
-        .GET
-        .Resource('client')
-        .Send
-        .GetList(TList<TObject>(FClients), TClient);
+  FClients.Clear;
+  request := PrepareRequest;
+  request
+    .GET
+    .BaseURL(edtBaseUrl.Text)
+    .Send
+    .GetList(TList<TObject>(FClients), TClient);
 
-    refreshList;
-  except
-    on E: Exception do
-      ShowMessage(e.Message);
-  end;
+  TListBindSourceAdapter<TClient>(AbsClients).Refresh;
 end;
 
 procedure TfrmMobileDayObject.lvClientsButtonClick(const Sender: TObject; const AItem: TListItem; const AObject: TListItemSimpleControl);
@@ -205,21 +180,12 @@ end;
 
 function TfrmMobileDayObject.PrepareRequest: IGBClientRequest;
 begin
-  FRequest
-    .BaseURL(edtBaseUrl.Text)
+  Result := NewClientRequest;
+  Result
     .Authorization
       .Basic
         .Username('mobileDay')
-        .Password('2020')
-      .&End
-    .&End;
-
-  result := FRequest;
-end;
-
-procedure TfrmMobileDayObject.refreshList;
-begin
-  TListBindSourceAdapter<TClient>(absClients).Refresh;
+        .Password('2020');
 end;
 
 procedure TfrmMobileDayObject.tbcClientChange(Sender: TObject);
@@ -228,10 +194,13 @@ begin
 end;
 
 procedure TfrmMobileDayObject.Update(AClient: TClient);
+var
+  request : IGBClientRequest;
 begin
-  PrepareRequest
+  request := PrepareRequest;
+  request
     .PUT
-    .Resource('client/' + AClient.id.ToString)
+    .BaseURL(edtBaseUrl.Text + '/' + AClient.id.ToString)
     .Body
       .AddOrSet(AClient)
     .&End

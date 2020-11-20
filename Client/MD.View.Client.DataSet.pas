@@ -11,10 +11,11 @@ uses
   System.Generics.Collections, Data.Bind.EngExt, Fmx.Bind.DBEngExt,
   System.Rtti, System.Bindings.Outputs, Fmx.Bind.Editors,
   Data.Bind.Components, Data.Bind.ObjectScope, FMX.Layouts,
-  GBClient.Interfaces, System.JSON, REST.Json, FireDAC.Stan.Intf,
+  System.JSON, REST.Json, FireDAC.Stan.Intf,
   FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error,
   FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf, Data.DB,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Data.Bind.DBScope;
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Data.Bind.DBScope,
+  GBClient.Interfaces;
 
 type
   TfrmMobileDayDataSet = class(TForm)
@@ -61,9 +62,7 @@ type
     procedure lvClientsItemClick(const Sender: TObject; const AItem: TListViewItem);
     procedure btnSaveClick(Sender: TObject);
   private
-    FRequest : IGBClientRequest;
-
-    function PrepareRequest: IGBClientRequest;
+    function PrepareRequest : IGBClientRequest;
 
     procedure listAll;
     procedure Insert;
@@ -104,20 +103,19 @@ begin
 end;
 
 procedure TfrmMobileDayDataSet.Delete;
+var
+  request: IGBClientRequest;
 begin
-  PrepareRequest
+  request := PrepareRequest;
+  request
     .DELETE
-    .Resource('client/{id}')
-    .ParamPath
-      .AddOrSet('id', dsClient.FieldByName('id').AsInteger)
-    .&End
+    .BaseURL(edtBaseUrl.Text + '/' + dsClient.FieldByName('id').AsString)
     .Send;
 end;
 
 procedure TfrmMobileDayDataSet.FormCreate(Sender: TObject);
 begin
-  FRequest := NewClientRequest;
-
+  btnClear.Visible      := False;
   tbcClient.ActiveTab   := tiList;
   tbcClient.TabPosition := TTabPosition.None;
 
@@ -125,34 +123,35 @@ begin
 end;
 
 procedure TfrmMobileDayDataSet.Insert;
+var
+  request: IGBClientRequest;
 begin
   dsClient.Post;
-
-  PrepareRequest
+  request := PrepareRequest;
+  request
     .POST
-    .Resource('client')
+    .BaseURL(edtBaseUrl.Text)
     .Body
       .AddOrSet(dsClient)
     .&End
     .Send;
 
   dsClient.Edit;
-  dsClient.FieldByName('id').AsString := FRequest.Response.HeaderAsString('location');
+  dsClient.FieldByName('id').AsFloat :=
+    request.Response.HeaderAsFloat('location');
   dsClient.Post;
 end;
 
 procedure TfrmMobileDayDataSet.listAll;
+var
+  request: IGBClientRequest;
 begin
-  try
-    PrepareRequest
-      .GET
-      .Resource('client')
-      .Send
-      .DataSet(dsClient)
-  except
-    on E: Exception do
-      ShowMessage(e.Message);
-  end;
+  request := PrepareRequest;
+  request
+    .GET
+    .BaseURL(edtBaseUrl.Text)
+    .Send
+    .DataSet(dsClient)
 end;
 
 procedure TfrmMobileDayDataSet.lvClientsButtonClick(const Sender: TObject; const AItem: TListItem; const AObject: TListItemSimpleControl);
@@ -169,16 +168,12 @@ end;
 
 function TfrmMobileDayDataSet.PrepareRequest: IGBClientRequest;
 begin
-  FRequest
-    .BaseURL(edtBaseUrl.Text)
+  result := newClientRequest;
+  result
     .Authorization
       .Basic
         .Username('mobileDay')
-        .Password('2020')
-      .&End
-    .&End;
-
-  result := FRequest;
+        .Password('2020');
 end;
 
 procedure TfrmMobileDayDataSet.tbcClientChange(Sender: TObject);
@@ -187,12 +182,14 @@ begin
 end;
 
 procedure TfrmMobileDayDataSet.Update;
+var
+  request: IGBClientRequest;
 begin
   dsClient.Post;
-
-  PrepareRequest
+  request := PrepareRequest;
+  request
     .PUT
-    .Resource('client/' + dsClient.FieldByName('id').AsString)
+    .BaseURL(edtBaseUrl.Text + '/' + dsClient.FieldByName('id').AsString)
     .Body
       .AddOrSet(dsClient)
     .&End
