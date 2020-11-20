@@ -1,0 +1,11 @@
+{
+	"name": "ClientMobile",
+	"description": "",
+	"version": "1.0.0",
+	"homepage": "",
+	"mainsrc": "./",
+	"projects": [],
+	"dependencies": {
+		"bitbucket.org/gabrielbaltazar/gbclient": "1.0.1"
+	}
+}

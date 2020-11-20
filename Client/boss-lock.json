@@ -1,0 +1,14 @@
+{
+	"hash": "d41d8cd98f00b204e9800998ecf8427e",
+	"updated": "2020-11-10T17:54:06.368552-03:00",
+	"installedModules": {
+		"bitbucket.org/gabrielbaltazar/gbclient": {
+			"name": "gbclient",
+			"version": "1.0.1",
+			"hash": "956194da13a960f9532554988ffc4db1",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		}
+	}
+}
