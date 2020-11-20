@@ -3,10 +3,10 @@
         <ProjectGuid>{C6351694-146B-4D52-A9FB-AD922E60E220}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="Client\MobileDayApp.dproj">
+        <Projects Include="Server\MobileDayServer.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Server\MobileDayServer.dproj">
+        <Projects Include="Client\MobileDayApp.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -17,15 +17,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="MobileDayApp">
-        <MSBuild Projects="Client\MobileDayApp.dproj"/>
-    </Target>
-    <Target Name="MobileDayApp:Clean">
-        <MSBuild Projects="Client\MobileDayApp.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="MobileDayApp:Make">
-        <MSBuild Projects="Client\MobileDayApp.dproj" Targets="Make"/>
-    </Target>
     <Target Name="MobileDayServer">
         <MSBuild Projects="Server\MobileDayServer.dproj"/>
     </Target>
@@ -35,14 +26,23 @@
     <Target Name="MobileDayServer:Make">
         <MSBuild Projects="Server\MobileDayServer.dproj" Targets="Make"/>
     </Target>
+    <Target Name="MobileDayApp">
+        <MSBuild Projects="Client\MobileDayApp.dproj"/>
+    </Target>
+    <Target Name="MobileDayApp:Clean">
+        <MSBuild Projects="Client\MobileDayApp.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MobileDayApp:Make">
+        <MSBuild Projects="Client\MobileDayApp.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="MobileDayApp;MobileDayServer"/>
+        <CallTarget Targets="MobileDayServer;MobileDayApp"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="MobileDayApp:Clean;MobileDayServer:Clean"/>
+        <CallTarget Targets="MobileDayServer:Clean;MobileDayApp:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="MobileDayApp:Make;MobileDayServer:Make"/>
+        <CallTarget Targets="MobileDayServer:Make;MobileDayApp:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
