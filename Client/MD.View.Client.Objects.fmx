@@ -101,6 +101,7 @@ object frmMobileDayObject: TfrmMobileDayObject
           ItemEditAppearanceClassName = 'TImageListItemRightButtonDeleteAppearance'
           HeaderAppearanceClassName = 'TListHeaderObjects'
           FooterAppearanceClassName = 'TListHeaderObjects'
+          ItemIndex = 0
           Align = Client
           Size.Width = 351.000000000000000000
           Size.Height = 493.000000000000000000
@@ -173,7 +174,7 @@ object frmMobileDayObject: TfrmMobileDayObject
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         TextSettings.FontColor = xFF011638
         Text = 'Name'
-        TabOrder = 21
+        TabOrder = 27
       end
       object edtName: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -194,7 +195,7 @@ object frmMobileDayObject: TfrmMobileDayObject
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         TextSettings.FontColor = xFF011638
         Text = 'Last Name'
-        TabOrder = 15
+        TabOrder = 19
       end
       object edtLastName: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -215,7 +216,7 @@ object frmMobileDayObject: TfrmMobileDayObject
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         TextSettings.FontColor = xFF011638
         Text = 'Phone'
-        TabOrder = 9
+        TabOrder = 11
       end
       object edtPhone: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -288,13 +289,82 @@ object frmMobileDayObject: TfrmMobileDayObject
       object edtBaseUrl: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
         TabOrder = 2
-        Text = 'http://localhost:9000'
+        Text = 'http://localhost:9000/client'
         Position.X = 16.000000000000000000
         Position.Y = 63.000000000000000000
         Size.Width = 329.000000000000000000
         Size.Height = 32.000000000000000000
         Size.PlatformDefault = False
       end
+    end
+  end
+  object adpClient: TDataGeneratorAdapter
+    FieldDefs = <
+      item
+        Name = 'id'
+        FieldType = ftInteger
+        ReadOnly = False
+      end
+      item
+        Name = 'name'
+        ReadOnly = False
+      end
+      item
+        Name = 'lastName'
+        ReadOnly = False
+      end
+      item
+        Name = 'phone'
+        ReadOnly = False
+      end>
+    Active = True
+    AutoPost = True
+    Options = [loptAllowInsert, loptAllowDelete, loptAllowModify]
+    Left = 96
+    Top = 482
+  end
+  object absClients: TAdapterBindSource
+    AutoActivate = True
+    OnCreateAdapter = absClientsCreateAdapter
+    Adapter = adpClient
+    ScopeMappings = <>
+    Left = 56
+    Top = 440
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 12
+    Top = 485
+    object LinkControlToField1: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = absClients
+      FieldName = 'name'
+      Control = edtName
+      Track = False
+    end
+    object LinkControlToField2: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = absClients
+      FieldName = 'lastName'
+      Control = edtLastName
+      Track = False
+    end
+    object LinkControlToField3: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = absClients
+      FieldName = 'phone'
+      Control = edtPhone
+      Track = False
+    end
+    object LinkListControlToField1: TLinkListControlToField
+      Category = 'Quick Bindings'
+      DataSource = absClients
+      FieldName = 'name'
+      Control = lvClients
+      FillExpressions = <>
+      FillHeaderExpressions = <>
+      FillBreakGroups = <>
     end
   end
 end

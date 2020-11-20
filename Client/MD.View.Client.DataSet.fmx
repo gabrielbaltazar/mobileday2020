@@ -63,7 +63,7 @@ object frmMobileDayDataSet: TfrmMobileDayDataSet
     Size.Height = 493.000000000000000000
     Size.PlatformDefault = False
     TabHeight = 49.000000000000000000
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 2
     TabPosition = Dots
     OnChange = tbcClientChange
@@ -78,7 +78,7 @@ object frmMobileDayDataSet: TfrmMobileDayDataSet
       CustomIcon = <
         item
         end>
-      IsSelected = False
+      IsSelected = True
       Size.Width = 8.000000000000000000
       Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
@@ -173,7 +173,7 @@ object frmMobileDayDataSet: TfrmMobileDayDataSet
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         TextSettings.FontColor = xFF011638
         Text = 'Name'
-        TabOrder = 24
+        TabOrder = 33
       end
       object edtName: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -194,7 +194,7 @@ object frmMobileDayDataSet: TfrmMobileDayDataSet
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         TextSettings.FontColor = xFF011638
         Text = 'Last Name'
-        TabOrder = 17
+        TabOrder = 23
       end
       object edtLastName: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -215,7 +215,7 @@ object frmMobileDayDataSet: TfrmMobileDayDataSet
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         TextSettings.FontColor = xFF011638
         Text = 'Phone'
-        TabOrder = 10
+        TabOrder = 13
       end
       object edtPhone: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
@@ -259,7 +259,7 @@ object frmMobileDayDataSet: TfrmMobileDayDataSet
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 8.000000000000000000
       Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
@@ -288,7 +288,7 @@ object frmMobileDayDataSet: TfrmMobileDayDataSet
       object edtBaseUrl: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
         TabOrder = 2
-        Text = 'http://localhost:9000'
+        Text = 'http://localhost:9000/client'
         Position.X = 16.000000000000000000
         Position.Y = 63.000000000000000000
         Size.Width = 329.000000000000000000

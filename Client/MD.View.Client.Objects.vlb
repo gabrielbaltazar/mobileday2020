@@ -1,12 +1,13 @@
 ﻿[edtPhone]
-Coordinates=30,260,61,51
+Coordinates=690,320,61,51
 Visible=True
 
 [Label5]
 Coordinates=272,410,46,51
 
 [lvClients]
-Coordinates=311,128,89,213
+Coordinates=311,128,89,195
+Visible=True
 
 [edtBaseUrl]
 Coordinates=439,410,68,51
@@ -61,10 +62,10 @@ Coordinates=812,410,69,33
 Coordinates=706,410,69,33
 
 [edtLastName]
-Coordinates=319,10,79,51
+Coordinates=780,220,79,51
 
 [edtName]
-Coordinates=10,168,57,51
+Coordinates=830,140,57,51
 
 [btnClear]
 Coordinates=602,10,56,51
@@ -74,5 +75,15 @@ Coordinates=631,410,44,33
 
 []
 Visible=False
-Coordinates=444,111,82,33
+Coordinates=80,1,82,33
+
+[adpClient]
+Coordinates=540,160,61,33
+Visible=False
+
+[BindingsList1]
+Coordinates=0,0,82,33
+
+[absClients]
+Coordinates=540,160,116,159
 

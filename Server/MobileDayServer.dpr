@@ -12,11 +12,11 @@ uses
   MD.Controller.Client in 'MD.Controller.Client.pas';
 
 begin
-//  THorse.Use(HorseBasicAuthentication(
-//    function(const AUsername, APassword: string): Boolean
-//    begin
-//      Result := AUsername.Equals('mobileDay') and APassword.Equals('2020');
-//    end));
+  THorse.Use(HorseBasicAuthentication(
+    function(const AUsername, APassword: string): Boolean
+    begin
+      Result := AUsername.Equals('mobileDay') and APassword.Equals('2020');
+    end));
 
 
   MD.Controller.Client.Registry;

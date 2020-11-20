@@ -66,13 +66,18 @@ end;
 
 procedure TDAOClient.delete(Id: Integer);
 var
-  auxClient: TClient;
+  i : Integer;
 begin
-  auxClient := find(Id);
-  if not Assigned(auxClient) then
-    raise Exception.CreateFmt('Client %s not found.', [Id.ToString]);
+  for i := 0 to Pred(Clients.Count) do
+  begin
+    if Clients[i].id = Id then
+    begin
+      Clients.Delete(i);
+      Exit;
+    end;
+  end;
 
-  Clients.Remove(auxClient);
+  raise Exception.CreateFmt('Client %s not found.', [Id.ToString]);
 end;
 
 function TDAOClient.find(Id: Integer): TClient;
@@ -83,7 +88,13 @@ begin
   for i := 0 to Pred(Clients.Count) do
   begin
     if Clients[i].id = id then
-      Exit(Clients[i])
+    begin
+      result          := TClient.Create;
+      Result.id       := Clients[i].id;
+      result.name     := Clients[i].name;
+      Result.lastName := Clients[i].lastName;
+      Result.phone    := Clients[i].phone;
+    end;
   end;
 end;
 
@@ -108,15 +119,20 @@ end;
 
 procedure TDAOClient.update(Client: TClient);
 var
-  auxClient: TClient;
+  i : Integer;
 begin
-  auxClient := find(Client.id);
-  if not Assigned(auxClient) then
-    raise Exception.CreateFmt('Client %s not found.', [Client.id]);
+  for i := 0 to Pred(Clients.Count) do
+  begin
+    if Clients[i].id = Client.id then
+    begin
+      Clients[i].name := Client.name;
+      Clients[i].lastName := Client.lastName;
+      Clients[i].phone := Client.phone;
+      Exit;
+    end;
+  end;
 
-  auxClient.name     := Client.name;
-  auxClient.lastName := Client.lastName;
-  auxClient.phone    := Client.phone;
+  raise Exception.CreateFmt('Client %s not found.', [Client.id]);
 end;
 
 initialization
