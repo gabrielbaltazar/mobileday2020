@@ -6,6 +6,7 @@
 	"mainsrc": "./",
 	"projects": [],
 	"dependencies": {
-		"github.com/gabrielbaltazar/gbclient": "1.0.2"
+		"github.com/gabrielbaltazar/gbclient": "1.0.2",
+		"bitbucket.org/isaquepinheiro/cqlbr": ""
 	}
 }
